@@ -2,12 +2,24 @@ from django.shortcuts import render
 from django.http import JsonResponse
 
 # Create your views here.
-def fib(request):
+
+# フィボナッチ数列を返す関数
+def fib(n):
+    n1 = 0
+    n2 = 1
+    for i in range(n):
+        n1, n2 = n2, n1 + n2
+    return n1
+
+def fib_api(request):
     n = request.GET.get('n')
-    n = int(n)
-    if n <= 0:
-        return JsonResponse({"status": 400, "message": 'Bad request'})
-    fib_sequence = [0, 1]
-    while len(fib_sequence) <= n:
-        fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])
-    return JsonResponse({'result': fib_sequence[n]})
+    try:
+        n = int(n)
+        if n <= 0:
+            return JsonResponse({"status": 400, "message": 'Invalid input. Please provide a positive integer.'})
+        fib_result = fib(n)
+        return JsonResponse({'result': fib_result})
+    except ValueError:
+        return JsonResponse({"status": 400, "message": 'Invalid input. Please provide a valid positive integer.'})
+    except Exception as e:
+        return JsonResponse({"status": 400, "message": f'Bad request: {str(e)}'})
