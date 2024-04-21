@@ -16,10 +16,10 @@ def fib_api(request):
     try:
         n = int(n)
         if n <= 0:
-            return JsonResponse({"status": 400, "message": 'Invalid input. Please provide a positive integer.'})
+            return JsonResponse({"status": 400, "message": 'Invalid input. Please provide a positive integer.'}, status=400)
         fib_result = fib(n)
-        return JsonResponse({'result': fib_result})
+        return JsonResponse({'result': fib_result}, status=200)
     except ValueError:
-        return JsonResponse({"status": 400, "message": 'Invalid input. Please provide a valid positive integer.'})
+        return JsonResponse({"status": 400, "message": 'Invalid input. Please provide a valid positive integer.'}, status=400)
     except Exception as e:
-        return JsonResponse({"status": 400, "message": f'Bad request: {str(e)}'})
+        return JsonResponse({"status": 400, "message": f'Bad request: {str(e)}'}, status=400)
